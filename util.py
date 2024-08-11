@@ -9,6 +9,25 @@
 import sys
 import inspect
 import heapq, random
+from enum import Enum
+
+
+class Direction(Enum):
+    FORWARD = "FORWARD"
+    BACKWARD = "BACKWARD"
+
+
+class Orientation(Enum):
+    VERTICAL = "VERTICAL"
+    HORIZONTAL = "HORIZONTAL"
+
+
+class Node:
+    def __init__(self, state, path, cost):
+        self.state = state
+        self.path = path
+        self.cost = cost
+
 
 """
  Data structures useful for implementing SearchAgents
@@ -46,8 +65,8 @@ class Queue:
 
     def pop(self):
         """
-          Dequeue the earliest enqueued item still in the queue. This
-          operation removes the item from the queue.
+        Dequeue the earliest enqueued item still in the queue. This
+        operation removes the item from the queue.
         """
         return self.list.pop()
 
@@ -58,14 +77,14 @@ class Queue:
 
 class PriorityQueue:
     """
-      Implements a priority queue data structure. Each inserted item
-      has a priority associated with it and the client is usually interested
-      in quick retrieval of the lowest-priority item in the queue. This
-      data structure allows O(1) access to the lowest-priority item.
+    Implements a priority queue data structure. Each inserted item
+    has a priority associated with it and the client is usually interested
+    in quick retrieval of the lowest-priority item in the queue. This
+    data structure allows O(1) access to the lowest-priority item.
 
-      Note that this PriorityQueue does not allow you to change the priority
-      of an item.  However, you may insert the same item multiple times with
-      different priorities.
+    Note that this PriorityQueue does not allow you to change the priority
+    of an item.  However, you may insert the same item multiple times with
+    different priorities.
     """
 
     def __init__(self):
@@ -183,7 +202,8 @@ class Counter(dict):
         """
         Returns the key with the highest value.
         """
-        if len(self.keys()) == 0: return None
+        if len(self.keys()) == 0:
+            return None
         all = self.items()
         values = [x[1] for x in all]
         maxIndex = values.index(max(values))
@@ -219,7 +239,8 @@ class Counter(dict):
         Counter will result in an error.
         """
         total = float(self.totalCount())
-        if total == 0: return
+        if total == 0:
+            return
         for key in self.keys():
             self[key] = self[key] / total
 
@@ -347,7 +368,8 @@ def normalize(vectorOrCounter):
     if type(vectorOrCounter) == type(normalizedCounter):
         counter = vectorOrCounter
         total = float(counter.totalCount())
-        if total == 0: return counter
+        if total == 0:
+            return counter
         for key in counter.keys():
             value = counter[key]
             normalizedCounter[key] = value / total
@@ -355,7 +377,8 @@ def normalize(vectorOrCounter):
     else:
         vector = vectorOrCounter
         s = float(sum(vector))
-        if s == 0: return vector
+        if s == 0:
+            return vector
         return [el / s for el in vector]
 
 
@@ -398,8 +421,8 @@ def sampleFromCounter(ctr):
 
 def getProbability(value, distribution, values):
     """
-      Gives the probability of a value under a discrete distribution
-      defined by (distributions, values).
+    Gives the probability of a value under a discrete distribution
+    defined by (distributions, values).
     """
     total = 0.0
     for prob, val in zip(distribution, values):
@@ -421,7 +444,8 @@ def chooseFromDistribution(distribution):
     base = 0.0
     for prob, element in distribution:
         base += prob
-        if r <= base: return element
+        if r <= base:
+            return element
 
 
 def nearestPoint(pos):
@@ -439,7 +463,7 @@ def sign(x):
     """
     Returns 1 or -1 depending on the sign of x
     """
-    if (x >= 0):
+    if x >= 0:
         return 1
     else:
         return -1
@@ -474,18 +498,20 @@ def lookup(name, namespace):
     Get a method or class from any imported module from its name.
     Usage: lookup(functionName, globals())
     """
-    dots = name.count('.')
+    dots = name.count(".")
     if dots > 0:
-        moduleName, objName = '.'.join(name.split('.')[:-1]), name.split('.')[-1]
+        moduleName, objName = ".".join(name.split(".")[:-1]), name.split(".")[-1]
         module = __import__(moduleName)
         return getattr(module, objName)
     else:
         modules = [obj for obj in namespace.values() if str(type(obj)) == "<type 'module'>"]
         options = [getattr(module, name) for module in modules if name in dir(module)]
         options += [obj[1] for obj in namespace.items() if obj[0] == name]
-        if len(options) == 1: return options[0]
-        if len(options) > 1: raise Exception('Name conflict for %s')
-        raise Exception('%s not found as a method or class' % name)
+        if len(options) == 1:
+            return options[0]
+        if len(options) > 1:
+            raise Exception("Name conflict for %s")
+        raise Exception("%s not found as a method or class" % name)
 
 
 def pause():
@@ -502,6 +528,7 @@ import signal
 
 class TimeoutFunctionException(Exception):
     """Exception to raise on a timeout"""
+
     pass
 
 
@@ -516,7 +543,7 @@ class TimeoutFunction:
         raise TimeoutFunctionException()
 
     def __call__(self, *args):
-        if not 'SIGALRM' in dir(signal):
+        if not "SIGALRM" in dir(signal):
             return self.function(*args)
         old = signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(self.timeout)
