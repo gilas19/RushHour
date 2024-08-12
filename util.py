@@ -21,6 +21,14 @@ class Orientation(Enum):
     VERTICAL = "VERTICAL"
     HORIZONTAL = "HORIZONTAL"
 
+
+class VehicleType(Enum):
+    PLAYER1 = 1
+    PLAYER2 = 2
+    VEHICLE = 3
+    BROKEN_DOWN = 4
+
+
 # class Orientation(Enum):
 #     HORIZONTAL = 1
 #     VERTICAL = 2
@@ -28,6 +36,7 @@ class Orientation(Enum):
 # class Direction(Enum):
 #     FORWARD = 1
 #     BACKWARD = 2
+
 
 class Node:
     def __init__(self, state, path, cost):

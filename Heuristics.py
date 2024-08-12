@@ -55,10 +55,28 @@ def null(grid, height, width):
     """
     return 0
 
+    # def two_player_heuristic(game_board, player):
+    #     player1_distance = game_board.width - game_board.player1_car.get_end_location()["x"] - 1
+    #     player2_distance = game_board.height - game_board.player2_car.get_end_location()["y"] - 1
 
-def two_player_heuristic(game_board, player):
-    player1_distance = game_board.width - game_board.player1_car.get_end_location()["x"] - 1
-    player2_distance = game_board.height - game_board.player2_car.get_end_location()["y"] - 1
+    #     if player == 1:
+    #         return player2_distance - player1_distance
+    #     else:
+    #         return player1_distance - player2_distance
+
+
+def find_vehicle(grid, name):
+    for row in grid:
+        for vehicle in row:
+            if vehicle and vehicle.get_name() == name:
+                return vehicle
+
+
+def two_player_heuristic(grid, player):
+    player1 = find_vehicle(grid, "X")
+    player2 = find_vehicle(grid, "Y")
+    player1_distance = len(grid[0]) - player1.end["x"] - 1
+    player2_distance = len(grid) - player2.end["y"] - 1
 
     if player == 1:
         return player2_distance - player1_distance

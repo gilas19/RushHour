@@ -1,4 +1,5 @@
 from util import Orientation, Direction
+from copy import deepcopy
 
 
 class GameBoard:
@@ -8,6 +9,13 @@ class GameBoard:
         self.grid = self.generate_grid()
         self.player1_car = None
         self.player2_car = None
+
+    def __deepcopy__(self, memo):
+        new_board = GameBoard(self.height, self.width)
+        new_board.grid = deepcopy(self.grid)
+        new_board.player1_car = deepcopy(self.player1_car)
+        new_board.player2_car = deepcopy(self.player2_car)
+        return new_board
 
     def generate_grid(self):
         return [[0 for _ in range(self.width)] for _ in range(self.height)]
@@ -84,12 +92,15 @@ class Vehicle:
         "R": "green",
     }
 
-    def __init__(self, name, type):
+    def __init__(self, name, type, start={"x": None, "y": None}, end={"x": None, "y": None}):
         self.name = name
         self.type = type
-        self.start = {"x": None, "y": None}
-        self.end = {"x": None, "y": None}
+        self.start = start
+        self.end = end
         self.color = self.VEHICLE_COLORS.get(name, "black")
+
+    def __deepcopy__(self, memo):
+        return Vehicle(self.name, self.type, deepcopy(self.start), deepcopy(self.end))
 
     def set_start_location(self, x, y):
         self.start = {"x": x, "y": y}
