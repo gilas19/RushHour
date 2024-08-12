@@ -1,20 +1,15 @@
 import re
 from BoardObjects import GameBoard, Vehicle
 
-
 class BoardLoader:
-    """Class responsible for loading and parsing a game board file."""
-
     @staticmethod
     def load(filename):
-        """Load the game board from the specified file."""
         content = BoardLoader.read(filename)
         BoardLoader.validate(content)
         return BoardLoader.parse_to_objects(content)
 
     @staticmethod
     def read(filename):
-        """Read the content of the game board file."""
         try:
             with open(filename, "r") as file:
                 return file.read().splitlines()
@@ -23,7 +18,6 @@ class BoardLoader:
 
     @staticmethod
     def parse_to_objects(content):
-        """Parse the game board content into vehicle and board objects."""
         vehicles = {}
         for row_index, line in enumerate(content):
             for column_index, letter in enumerate(line):
@@ -41,9 +35,10 @@ class BoardLoader:
 
     @staticmethod
     def determine_vehicle_type(letter):
-        """Determine the type of vehicle based on the letter."""
         if letter == "X":
-            return "main"
+            return "player1_car"
+        elif letter == "Y":
+            return "player2_car"
         elif letter.isupper():
             return "vehicle"
         elif letter.islower():
@@ -52,23 +47,27 @@ class BoardLoader:
 
     @staticmethod
     def initialize_game_board(content, vehicles):
-        """Initialize the game board with vehicles placed on it."""
         board_width = len(content[0])
         board_height = len(content)
         game_board = GameBoard(board_height, board_width)
         for vehicle in sorted(vehicles.values(), key=lambda v: v.name):
             locations = vehicle.get_occupied_locations()
-            game_board.add_vehicle(vehicle, locations)
+            if vehicle.type == "player1_car":
+                game_board.add_player_car(vehicle, 1)
+            elif vehicle.type == "player2_car":
+                game_board.add_player_car(vehicle, 2)
+            else:
+                game_board.add_vehicle(vehicle, locations)
         return game_board
 
     @staticmethod
     def validate(content):
-        """Validate the content of the game board file."""
         if not content:
             raise ValueError("The file is empty! Please select a file with the correct data format.")
 
         line_length = len(content[0])
-        red_car_size = 0
+        player1_car_size = 0
+        player2_car_size = 0
 
         for line in content:
             if len(line) != line_length:
@@ -76,7 +75,9 @@ class BoardLoader:
             if re.sub(r"[A-Za-z.]+", "", line):
                 raise ValueError("The data format is incorrect! Only letters and '.' are allowed.")
             if "X" in line:
-                red_car_size += 1
+                player1_car_size += 1
+            if "Y" in line:
+                player2_car_size += 1
 
-        if red_car_size == 0:
-            raise ValueError("The data format is incorrect! The red car is not set.")
+        if player1_car_size == 0 or player2_car_size == 0:
+            raise ValueError("The data format is incorrect! Both player cars (X and Y) must be present.")

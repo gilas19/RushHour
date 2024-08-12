@@ -1,56 +1,72 @@
-from util import Orientation
+from util import Orientation, Direction
 
 
 class GameBoard:
-    """Represents the game board for the Rush Hour game."""
-
     def __init__(self, height, width):
-        """Initialize the game board with specified dimensions."""
         self.height = height
         self.width = width
         self.grid = self.generate_grid()
+        self.player1_car = None
+        self.player2_car = None
 
     def generate_grid(self):
-        """Generate an empty grid based on the board dimensions."""
         return [[0 for _ in range(self.width)] for _ in range(self.height)]
 
     def get_grid(self):
-        """Return the current state of the grid."""
         return self.grid
 
     def add_vehicle(self, vehicle, locations):
-        """Place a vehicle on the board at specified locations.
-
-        Args:
-            vehicle: The vehicle object to be placed on the board.
-            locations (list of dicts): A list of locations where the vehicle occupies, each location
-                                       is represented as a dictionary with 'x' and 'y' keys.
-        """
         for location in locations:
             x, y = location["x"], location["y"]
             if self.is_within_bounds(x, y):
-                self.grid[x][y] = vehicle
+                self.grid[y][x] = vehicle
             else:
                 raise ValueError(f"Location ({x}, {y}) is out of bounds for the board.")
 
+    def add_player_car(self, vehicle, player):
+        if player == 1:
+            self.player1_car = vehicle
+        elif player == 2:
+            self.player2_car = vehicle
+        self.add_vehicle(vehicle, vehicle.get_occupied_locations())
+
     def is_within_bounds(self, x, y):
-        """Check if the given coordinates are within the bounds of the board."""
-        return 0 <= x < self.height and 0 <= y < self.width
+        return 0 <= x < self.width and 0 <= y < self.height
 
     def get_height(self):
-        """Return the height of the game board."""
         return self.height
 
     def get_width(self):
-        """Return the width of the game board."""
         return self.width
+
+    def is_game_over(self):
+        return self.is_player_won(1) or self.is_player_won(2)
+
+    def is_player_won(self, player):
+        if player == 1:
+            return self.player1_car.get_end_location()["x"] == self.width - 1
+        elif player == 2:
+            return self.player2_car.get_end_location()["y"] == self.height - 1
+        return False
+
+    def move_vehicle(self, vehicle, direction):
+        old_locations = vehicle.get_occupied_locations()
+        if direction == Direction.FORWARD:
+            vehicle.move_forward()
+        elif direction == Direction.BACKWARD:
+            vehicle.move_backward()
+        new_locations = vehicle.get_occupied_locations()
+
+        for loc in old_locations:
+            self.grid[loc["y"]][loc["x"]] = 0
+        for loc in new_locations:
+            self.grid[loc["y"]][loc["x"]] = vehicle
 
 
 class Vehicle:
-    """Represents a vehicle on the Rush Hour game board."""
-
     VEHICLE_COLORS = {
         "X": "red",
+        "Y": "blue",
         "A": "yellowgreen",
         "B": "gold",
         "C": "mediumpurple",
@@ -69,51 +85,46 @@ class Vehicle:
     }
 
     def __init__(self, name, type):
-        """Initialize a vehicle with a name and type."""
         self.name = name
-        self.type = type  # main, vehicle, broken_down
+        self.type = type
         self.start = {"x": None, "y": None}
         self.end = {"x": None, "y": None}
         self.color = self.VEHICLE_COLORS.get(name, "black")
-        self.occupied_locations = []
 
     def set_start_location(self, x, y):
-        """Set the start location of the vehicle."""
         self.start = {"x": x, "y": y}
 
     def get_start_location(self):
-        """Return the start location of the vehicle."""
         return self.start
 
     def set_end_location(self, x, y):
-        """Set the end location of the vehicle."""
         self.end = {"x": x, "y": y}
 
     def get_end_location(self):
-        """Return the end location of the vehicle."""
         return self.end
 
     def get_occupied_locations(self):
-        """Calculate and return the list of locations occupied by the vehicle."""
-        self.occupied_locations = []
-
+        occupied_locations = []
         if self.get_orientation() == Orientation.HORIZONTAL:
-            self.occupied_locations = [{"x": self.start["x"] + i, "y": self.start["y"]} for i in range(self.end["x"] - self.start["x"] + 1)]
+            occupied_locations = [{"x": self.start["x"] + i, "y": self.start["y"]} for i in range(self.end["x"] - self.start["x"] + 1)]
         elif self.get_orientation() == Orientation.VERTICAL:
-            self.occupied_locations = [{"x": self.start["x"], "y": self.start["y"] + i} for i in range(self.end["y"] - self.start["y"] + 1)]
-
-        return self.occupied_locations
+            occupied_locations = [{"x": self.start["x"], "y": self.start["y"] + i} for i in range(self.end["y"] - self.start["y"] + 1)]
+        return occupied_locations
 
     def get_name(self):
-        """Return the name of the vehicle."""
         return self.name
 
-    def is_main_vehicle(self):
-        """Check if the vehicle is the main (red car) vehicle."""
-        return self.type == "main"
+    def is_player_car(self):
+        return self.type in ["player1_car", "player2_car"]
+
+    def is_opponent_vehicle(self, player):
+        if player == 1:
+            return self.type == "player2_car"
+        elif player == 2:
+            return self.type == "player1_car"
+        return False
 
     def get_orientation(self):
-        """Determine and return the orientation of the vehicle."""
         if self.start["x"] == self.end["x"]:
             return Orientation.VERTICAL
         elif self.start["y"] == self.end["y"]:
@@ -122,7 +133,6 @@ class Vehicle:
             raise ValueError("Invalid vehicle position: Start and end points do not align horizontally or vertically.")
 
     def move_forward(self):
-        """Move the vehicle one step forward."""
         if self.get_orientation() == Orientation.HORIZONTAL:
             self.start["x"] += 1
             self.end["x"] += 1
@@ -131,7 +141,6 @@ class Vehicle:
             self.end["y"] += 1
 
     def move_backward(self):
-        """Move the vehicle one step backward."""
         if self.get_orientation() == Orientation.HORIZONTAL:
             self.start["x"] -= 1
             self.end["x"] -= 1
@@ -140,6 +149,4 @@ class Vehicle:
             self.end["y"] -= 1
 
     def __repr__(self):
-        """Return a string representation of the vehicle."""
-        # return f"{self.name} - {self.start} to {self.end}"
         return self.name

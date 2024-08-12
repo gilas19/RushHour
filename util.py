@@ -21,6 +21,13 @@ class Orientation(Enum):
     VERTICAL = "VERTICAL"
     HORIZONTAL = "HORIZONTAL"
 
+# class Orientation(Enum):
+#     HORIZONTAL = 1
+#     VERTICAL = 2
+
+# class Direction(Enum):
+#     FORWARD = 1
+#     BACKWARD = 2
 
 class Node:
     def __init__(self, state, path, cost):

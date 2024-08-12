@@ -54,3 +54,13 @@ def null(grid, height, width):
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
+
+def two_player_heuristic(game_board, player):
+    player1_distance = game_board.width - game_board.player1_car.get_end_location()["x"] - 1
+    player2_distance = game_board.height - game_board.player2_car.get_end_location()["y"] - 1
+
+    if player == 1:
+        return player2_distance - player1_distance
+    else:
+        return player1_distance - player2_distance
