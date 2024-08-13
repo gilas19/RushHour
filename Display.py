@@ -6,10 +6,34 @@ import matplotlib.patches as patches
 import matplotlib.animation as animation
 
 
+VEHICLE_COLORS = {
+    "X": "red",
+    "Y": "blue",
+    "A": "yellowgreen",
+    "B": "gold",
+    "C": "mediumpurple",
+    "D": "pink",
+    "E": "purple",
+    "F": "turquoise",
+    "G": "gray",
+    "H": "tan",
+    "I": "yellow",
+    "J": "silver",
+    "K": "white",
+    "O": "orange",
+    "P": "pink",
+    "Q": "blue",
+    "R": "green",
+    ".": "white",
+}
+
+SHOW_POSSIBLE_MOVES = True
+
+
 class GUIView:
     """Graphical User Interface (GUI) View for visualizing the game board and moves."""
 
-    def plot_board(self, grid, ax, move_index=None, total_moves=None, possible_moves=None):
+    def plot_board(self, board, move, ax, move_index=None, total_moves=None, possible_moves=None):
         """Render the current state of the board, including vehicle positions and possible moves.
 
         Args:
@@ -21,8 +45,8 @@ class GUIView:
                                                        containing vehicle information and direction. Defaults to None.
         """
         ax.clear()
-        ax.set_xlim(0, len(grid[0]))
-        ax.set_ylim(0, len(grid))
+        ax.set_xlim(0, board.width)
+        ax.set_ylim(0, board.height)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_yticklabels([])
@@ -30,31 +54,53 @@ class GUIView:
         ax.grid(True)
         ax.invert_yaxis()
 
+        print(move)
+        board.move(*move)
+
         # Draw the board and vehicles
-        for i, row in enumerate(grid):
+        for i, row in enumerate(board.grid):
             for j, cell in enumerate(row):
-                color = "white" if cell == 0 else cell.color if cell.type != "broken_down" else "black"
-                ax.add_patch(patches.Rectangle((i, j), 1, 1, edgecolor="black", facecolor=color))
+                color = "white" if cell == 0 else VEHICLE_COLORS[cell]
+                ax.add_patch(patches.Rectangle((j, i), 1, 1, edgecolor="black", facecolor=color))
 
         # Draw arrows indicating possible moves
-        if possible_moves:
-            for state in possible_moves:
-                vehicle, direction = state[0][0]
-                orientation = vehicle.get_orientation()
-                x_start, y_start = vehicle.start.values()
-                x_end, y_end = vehicle.end.values()
-
-                if orientation == Orientation.HORIZONTAL:
-                    if direction == Direction.FORWARD:
-                        arrow = patches.Arrow(x_end + 0.5, y_end + 0.5, 1, 0, facecolor="red", edgecolor="red")
-                    elif direction == Direction.BACKWARD:
-                        arrow = patches.Arrow(x_start + 0.5, y_start + 0.5, -1, 0, facecolor="red", edgecolor="red")
-
-                elif orientation == Orientation.VERTICAL:
-                    if direction == Direction.FORWARD:
-                        arrow = patches.Arrow(x_end + 0.5, y_end + 0.5, 0, 1, facecolor="red", edgecolor="red")
-                    elif direction == Direction.BACKWARD:
-                        arrow = patches.Arrow(x_start + 0.5, y_start + 0.5, 0, -1, facecolor="red", edgecolor="red")
+        if SHOW_POSSIBLE_MOVES:
+            for state in board.get_legal_actions():
+                vehicle, direction = state
+                orientation = board.get_orientation(vehicle)
+                vehicle = board.locate_vehicle(vehicle)
+                start_x, start_y = vehicle["start"]
+                end_x, end_y = vehicle["end"]
+                if orientation == "horizontal":
+                    if direction == "left":
+                        arrow = patches.FancyArrowPatch(
+                            (vehicle["start"][1], vehicle["start"][0] + 0.5),
+                            (vehicle["start"][1] - 1, vehicle["start"][0] + 0.5),
+                            mutation_scale=10,
+                            color="black",
+                        )
+                    else:
+                        arrow = patches.FancyArrowPatch(
+                            (vehicle["end"][1] + 1, vehicle["end"][0] + 0.5),
+                            (vehicle["end"][1] + 2, vehicle["end"][0] + 0.5),
+                            mutation_scale=10,
+                            color="black",
+                        )
+                else:
+                    if direction == "up":
+                        arrow = patches.FancyArrowPatch(
+                            (vehicle["start"][1] + 0.5, vehicle["start"][0]),
+                            (vehicle["start"][1] + 0.5, vehicle["start"][0] - 1),
+                            mutation_scale=10,
+                            color="black",
+                        )
+                    else:
+                        arrow = patches.FancyArrowPatch(
+                            (vehicle["end"][1] + 0.5, vehicle["end"][0] + 1),
+                            (vehicle["end"][1] + 0.5, vehicle["end"][0] + 2),
+                            mutation_scale=10,
+                            color="black",
+                        )
 
                 ax.add_patch(arrow)
 
@@ -62,7 +108,7 @@ class GUIView:
         if move_index is not None and total_moves is not None:
             ax.text(0.5, 1.05, f"Move: {move_index}/{total_moves}", transform=ax.transAxes, ha="center")
 
-    def show_solution(self, board, grids, possible_moves=None, save_location=None):
+    def animate_solution(self, board, solution, possible_moves=None):
         """Animate the solution, displaying the sequence of moves on the board.
 
         Args:
@@ -73,15 +119,12 @@ class GUIView:
         fig, ax = plt.subplots()
 
         def animate(i):
-            self.plot_board(grids[i], ax, move_index=i, total_moves=len(grids) - 1, possible_moves=possible_moves[i])
+            self.plot_board(board, solution[i], ax, move_index=i, total_moves=len(solution))
             return ax
 
-        ani = animation.FuncAnimation(fig, animate, frames=len(grids), interval=400)
-        if save_location:
-            ani.save(save_location, writer="pillow")
-        else:
-            plt.show()
-            plt.clf()
+        ani = animation.FuncAnimation(fig, animate, frames=len(solution), interval=1000, repeat=False, init_func=lambda: None)
+        plt.show()
+        plt.clf()
 
     def show_board(self, board, possible_moves=None):
         """Display the current state of the board without animation.
@@ -91,8 +134,7 @@ class GUIView:
             possible_moves (list of tuples, optional): Possible moves for the current board state. Defaults to None.
         """
         fig, ax = plt.subplots()
-        grid = board.get_grid()
-        self.plot_board(grid, ax, possible_moves=possible_moves)
+        self.plot_board(board, ax, possible_moves=board.get_legal_actions())
         plt.show()
         plt.clf()
 
@@ -108,85 +150,3 @@ class GUIView:
         print(f"Amount of Moves: {num_moves}\n")
         print(f"Time Passed: {time_delta:.3f} seconds\n")
         print(f"Expanded Nodes: {expanded_nodes}\n")
-
-
-class ConsoleView(object):
-
-    def __init__(self):
-        self.stdscr = curses.initscr()
-        self.stdscr.scrollok(1)
-        self.stdscr.idlok(1)
-        self.stdscr.syncok(1)
-        curses.setupterm()
-
-    def show_board(self, board):
-        """Display the loaded game board."""
-        grid, height, width = board.get_grid(), board.get_height(), board.get_width()
-        # self.stdscr.clear()
-
-        # Display game board
-        self.stdscr.addstr("The Puzzle: \n", curses.A_BOLD)
-        self.stdscr.addstr("\n")
-        for row in range(height):
-            for column in range(width):
-                vehicle = grid[column][row]
-                if vehicle:
-                    self.stdscr.addstr("%s " % vehicle.get_name())
-                else:
-                    self.stdscr.addstr(". ")
-
-                if column == width - 1:
-                    self.stdscr.addstr("\n")
-        self.stdscr.refresh()
-
-    def show_statistics(self, time_delta, expanded_nodes, amount_moves="--"):
-        print("\n")
-        print("\n")
-        print("Statistics: \n")
-        print("Amount of Moves: %s \n" % amount_moves)
-        print("Time Passed: %.3f seconds\n" % time_delta)
-        print("Expanded Nodes: %s\n" % expanded_nodes)
-
-    def display_solution(self, solution):
-        """Display the moves to solve the puzzle."""
-        print("\n")
-        print("\n")
-
-        if solution:
-            # Convert moves to a user friendly format and display them
-            print("The Solution: \n", curses.A_BOLD)
-            print("\n")
-
-            solution_size = len(solution)
-            items_per_row = math.ceil(solution_size / 4)
-            for row_index in range(items_per_row):
-                collection = []
-                for index in range(4):
-                    limit = (index * (items_per_row + 1)) + row_index
-                    if limit < solution_size:
-                        collection.append(limit)
-
-                for column_index, move in enumerate(solution[i] for i in collection):
-                    vehicle = move[0]
-                    direction = move[1]
-                    direction_name = ""
-                    if vehicle.get_orientation() == Orientation.HORIZONTAL and direction == Direction.FORWARD:
-                        direction_name = "Right"
-
-                    if vehicle.get_orientation() == Orientation.HORIZONTAL and direction == Direction.BACKWARD:
-                        direction_name = "Left"
-
-                    if vehicle.get_orientation() == Orientation.VERTICAL and direction == Direction.FORWARD:
-                        direction_name = "Down"
-
-                    if vehicle.get_orientation() == Orientation.VERTICAL and direction == Direction.BACKWARD:
-                        direction_name = "Up"
-
-                    display_text = "%02d: %s -> %s " % (collection[column_index] + 1, vehicle.get_name(), direction_name)
-                    print(display_text)
-                    print(" " * (20 - len(display_text)))
-
-                    if column_index == len(collection) - 1:
-                        print("\n")
-        else:
-            print("This puzzle is unsolvable. Even for me! :( \n")
