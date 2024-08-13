@@ -13,8 +13,8 @@ class GameBoard:
     def __deepcopy__(self, memo):
         new_board = GameBoard(self.height, self.width)
         new_board.grid = deepcopy(self.grid)
-        new_board.player1_car = deepcopy(self.player1_car)
-        new_board.player2_car = deepcopy(self.player2_car)
+        new_board.player1_car = new_board.grid[self.player1_car.start["y"]][self.player1_car.start["x"]]
+        new_board.player2_car = new_board.grid[self.player2_car.start["y"]][self.player2_car.start["x"]]
         return new_board
 
     def generate_grid(self):
@@ -47,6 +47,15 @@ class GameBoard:
     def get_width(self):
         return self.width
 
+    def is_solved(self):
+        for row in range(self.height):
+            for column in range(self.width):
+                vehicle = self.grid[row][column]
+                if vehicle and vehicle.is_player_car():
+                    if vehicle.get_end_location()["x"] == self.width - 1 or vehicle.get_end_location()["y"] == self.height - 1:
+                        return True
+        return False
+
     def is_game_over(self):
         return self.is_player_won(1) or self.is_player_won(2)
 
@@ -69,6 +78,40 @@ class GameBoard:
             self.grid[loc["y"]][loc["x"]] = 0
         for loc in new_locations:
             self.grid[loc["y"]][loc["x"]] = vehicle
+
+    def get_legal_actions(self, player):
+        if player == 1:
+            return self.get_legal_actions_for_vehicle(self.player1_car)
+        elif player == 2:
+            return self.get_legal_actions_for_vehicle(self.player2_car)
+
+    def get_legal_actions_for_vehicle(self, vehicle):
+        actions = []
+        start_x, start_y = vehicle.start["x"], vehicle.start["y"]
+        end_x, end_y = vehicle.end["x"], vehicle.end["y"]
+        if vehicle.get_orientation() == Orientation.HORIZONTAL:
+            if start_x > 0 and self.grid[start_x - 1][start_y] == 0:
+                actions.append((vehicle, Direction.BACKWARD))
+            if end_x < self.width - 1 and self.grid[end_x + 1][end_y] == 0:
+                actions.append((vehicle, Direction.FORWARD))
+        elif vehicle.get_orientation() == Orientation.VERTICAL:
+            if start_y > 0 and self.grid[start_x][start_y - 1] == 0:
+                actions.append((vehicle, Direction.BACKWARD))
+            if end_y < self.height - 1 and self.grid[end_x][end_y + 1] == 0:
+                actions.append((vehicle, Direction.FORWARD))
+        return actions
+
+    def generate_successor(self, player, action):
+        vehicle, direction = action
+        new_board = deepcopy(self)
+        new_vehicle = new_board.grid[vehicle.start["y"]][vehicle.start["x"]]
+        new_board.move_vehicle(new_vehicle, direction)
+        return new_board
+    
+    def display_board(self):
+        for row in self.grid:
+            print(" ".join(cell.name if cell else "." for cell in row))
+        print()
 
 
 class Vehicle:

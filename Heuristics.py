@@ -65,20 +65,36 @@ def null(grid, height, width):
     #         return player1_distance - player2_distance
 
 
-def find_vehicle(grid, name):
-    for row in grid:
-        for vehicle in row:
-            if vehicle and vehicle.get_name() == name:
-                return vehicle
+# def find_vehicle(grid, name):
+#     for row in grid:
+#         for vehicle in row:
+#             if vehicle and vehicle.get_name() == name:
+#                 return vehicle
 
 
-def two_player_heuristic(grid, player):
-    player1 = find_vehicle(grid, "X")
-    player2 = find_vehicle(grid, "Y")
-    player1_distance = len(grid[0]) - player1.end["x"] - 1
-    player2_distance = len(grid) - player2.end["y"] - 1
+# def two_players(grid, player):
+#     player1 = find_vehicle(grid, "X")
+#     player2 = find_vehicle(grid, "Y")
+#     player1_distance = len(grid[0]) - player1.end["x"] - 1
+#     player2_distance = len(grid) - player2.end["y"] - 1
 
-    if player == 1:
+#     if player == 1:
+#         return player2_distance - player1_distance
+#     else:
+#         return player1_distance - player2_distance
+# if player == 1:
+#     return len(grid[0]) - find_vehicle(grid, "X").end["x"] - 1
+# else:
+#     return len(grid) - find_vehicle(grid, "Y").end["y"] - 1
+
+
+def two_players(board, agent):
+    player1 = board.player1_car
+    player2 = board.player2_car
+    player1_distance = board.width - player1.get_end_location()["x"] - 1
+    player2_distance = board.height - player2.get_end_location()["y"] - 1
+
+    if agent == 1:
         return player2_distance - player1_distance
     else:
         return player1_distance - player2_distance

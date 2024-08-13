@@ -1,6 +1,7 @@
 import re
 from BoardObjects import GameBoard, Vehicle
 
+
 class BoardLoader:
     @staticmethod
     def load(filename):
@@ -79,5 +80,5 @@ class BoardLoader:
             if "Y" in line:
                 player2_car_size += 1
 
-        if player1_car_size == 0 or player2_car_size == 0:
+        if player1_car_size == 0 and player2_car_size == 0:
             raise ValueError("The data format is incorrect! Both player cars (X and Y) must be present.")
