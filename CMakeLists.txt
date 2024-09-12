@@ -7,16 +7,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add source files
 set(SOURCES
-    src/Board.cpp
-    src/Car.cpp
-    src/Move.cpp
-    src/SearchAlgorithms.cpp
-    src/Heuristics.cpp
+    search/Board.cpp
+    search/Car.cpp
+    search/Move.cpp
+    search/SearchAlgorithms.cpp
+    search/Heuristics.cpp
 )
-include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/search)
 
 # Create executable
-add_executable(rushhour src/main.cpp ${SOURCES})
+add_executable(rushhour search/main.cpp ${SOURCES})
 
 # Include directories
 target_include_directories(rushhour PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
