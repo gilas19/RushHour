@@ -10,9 +10,19 @@ Key features:
 This project demonstrates the application of AI techniques to solve and analyze the Rush Hour puzzle game, providing a platform for comparing different algorithms and heuristics.
 
 
-## How to Build
+## How to Run
 
-Run the following commands to build the project:
+Clone the repository
+```
+git clone https://github.com/gilas19/RushHour.git
+```
+
+Build the project
+```
+mkdir build && cd build && cmake .. && make
+```
+
+* if using docker, run the following commands to build the project and run the container:
 ```
 docker build -t rushhour .
 docker run -it rushhour
