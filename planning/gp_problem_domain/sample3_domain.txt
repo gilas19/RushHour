@@ -1,0 +1,115 @@
+Propositions:
+0_0_empty 0_1_empty 0_2_empty 0_3_empty 0_4_empty 0_5_empty 1_0_empty 1_1_empty 1_2_empty 1_3_empty 1_4_empty 1_5_empty 2_0_empty 2_1_empty 2_2_empty 2_3_empty 2_4_empty 2_5_empty 3_0_empty 3_1_empty 3_2_empty 3_3_empty 3_4_empty 3_5_empty 4_0_empty 4_1_empty 4_2_empty 4_3_empty 4_4_empty 4_5_empty 5_0_empty 5_1_empty 5_2_empty 5_3_empty 5_4_empty 5_5_empty B_left_0_3 B_right_2_3 B_left_1_3 B_right_3_3 B_left_2_3 B_right_4_3 B_left_3_3 B_right_5_3 A_up_0_0 A_down_0_2 A_up_0_1 A_down_0_3 A_up_0_2 A_down_0_4 A_up_0_3 A_down_0_5 C_up_3_0 C_down_3_1 C_up_3_1 C_down_3_2 C_up_3_2 C_down_3_3 C_up_3_3 C_down_3_4 C_up_3_4 C_down_3_5 X_left_0_1 X_right_1_1 X_left_1_1 X_right_2_1 X_left_2_1 X_right_3_1 X_left_3_1 X_right_4_1 X_left_4_1 X_right_5_1
+Actions:
+Name: B_Move_right_To_3_3
+pre: 3_3_empty B_right_2_3
+add: 0_3_empty B_right_3_3 B_left_1_3
+del: 3_3_empty B_right_2_3 B_left_0_3
+Name: B_Move_right_To_4_3
+pre: 4_3_empty B_right_3_3
+add: 1_3_empty B_right_4_3 B_left_2_3
+del: 4_3_empty B_right_3_3 B_left_1_3
+Name: B_Move_left_To_0_3
+pre: 0_3_empty B_left_1_3
+add: 3_3_empty B_left_0_3 B_right_2_3
+del: 0_3_empty B_left_1_3 B_right_3_3
+Name: B_Move_right_To_5_3
+pre: 5_3_empty B_right_4_3
+add: 2_3_empty B_right_5_3 B_left_3_3
+del: 5_3_empty B_right_4_3 B_left_2_3
+Name: B_Move_left_To_1_3
+pre: 1_3_empty B_left_2_3
+add: 4_3_empty B_left_1_3 B_right_3_3
+del: 1_3_empty B_left_2_3 B_right_4_3
+Name: B_Move_left_To_2_3
+pre: 2_3_empty B_left_3_3
+add: 5_3_empty B_left_2_3 B_right_4_3
+del: 2_3_empty B_left_3_3 B_right_5_3
+Name: A_Move_down_To_0_3
+pre: 0_3_empty A_down_0_2
+add: 0_0_empty A_down_0_3 A_up_0_1
+del: 0_3_empty A_down_0_2 A_up_0_0
+Name: A_Move_down_To_0_4
+pre: 0_4_empty A_down_0_3
+add: 0_1_empty A_down_0_4 A_up_0_2
+del: 0_4_empty A_down_0_3 A_up_0_1
+Name: A_Move_up_To_0_0
+pre: 0_0_empty A_up_0_1
+add: 0_3_empty A_up_0_0 A_down_0_2
+del: 0_0_empty A_up_0_1 A_down_0_3
+Name: A_Move_down_To_0_5
+pre: 0_5_empty A_down_0_4
+add: 0_2_empty A_down_0_5 A_up_0_3
+del: 0_5_empty A_down_0_4 A_up_0_2
+Name: A_Move_up_To_0_1
+pre: 0_1_empty A_up_0_2
+add: 0_4_empty A_up_0_1 A_down_0_3
+del: 0_1_empty A_up_0_2 A_down_0_4
+Name: A_Move_up_To_0_2
+pre: 0_2_empty A_up_0_3
+add: 0_5_empty A_up_0_2 A_down_0_4
+del: 0_2_empty A_up_0_3 A_down_0_5
+Name: C_Move_down_To_3_2
+pre: 3_2_empty C_down_3_1
+add: 3_0_empty C_down_3_2 C_up_3_1
+del: 3_2_empty C_down_3_1 C_up_3_0
+Name: C_Move_down_To_3_3
+pre: 3_3_empty C_down_3_2
+add: 3_1_empty C_down_3_3 C_up_3_2
+del: 3_3_empty C_down_3_2 C_up_3_1
+Name: C_Move_up_To_3_0
+pre: 3_0_empty C_up_3_1
+add: 3_2_empty C_up_3_0 C_down_3_1
+del: 3_0_empty C_up_3_1 C_down_3_2
+Name: C_Move_down_To_3_4
+pre: 3_4_empty C_down_3_3
+add: 3_2_empty C_down_3_4 C_up_3_3
+del: 3_4_empty C_down_3_3 C_up_3_2
+Name: C_Move_up_To_3_1
+pre: 3_1_empty C_up_3_2
+add: 3_3_empty C_up_3_1 C_down_3_2
+del: 3_1_empty C_up_3_2 C_down_3_3
+Name: C_Move_down_To_3_5
+pre: 3_5_empty C_down_3_4
+add: 3_3_empty C_down_3_5 C_up_3_4
+del: 3_5_empty C_down_3_4 C_up_3_3
+Name: C_Move_up_To_3_2
+pre: 3_2_empty C_up_3_3
+add: 3_4_empty C_up_3_2 C_down_3_3
+del: 3_2_empty C_up_3_3 C_down_3_4
+Name: C_Move_up_To_3_3
+pre: 3_3_empty C_up_3_4
+add: 3_5_empty C_up_3_3 C_down_3_4
+del: 3_3_empty C_up_3_4 C_down_3_5
+Name: X_Move_right_To_2_1
+pre: 2_1_empty X_right_1_1
+add: 0_1_empty X_right_2_1 X_left_1_1
+del: 2_1_empty X_right_1_1 X_left_0_1
+Name: X_Move_right_To_3_1
+pre: 3_1_empty X_right_2_1
+add: 1_1_empty X_right_3_1 X_left_2_1
+del: 3_1_empty X_right_2_1 X_left_1_1
+Name: X_Move_left_To_0_1
+pre: 0_1_empty X_left_1_1
+add: 2_1_empty X_left_0_1 X_right_1_1
+del: 0_1_empty X_left_1_1 X_right_2_1
+Name: X_Move_right_To_4_1
+pre: 4_1_empty X_right_3_1
+add: 2_1_empty X_right_4_1 X_left_3_1
+del: 4_1_empty X_right_3_1 X_left_2_1
+Name: X_Move_left_To_1_1
+pre: 1_1_empty X_left_2_1
+add: 3_1_empty X_left_1_1 X_right_2_1
+del: 1_1_empty X_left_2_1 X_right_3_1
+Name: X_Move_right_To_5_1
+pre: 5_1_empty X_right_4_1
+add: 3_1_empty X_right_5_1 X_left_4_1
+del: 5_1_empty X_right_4_1 X_left_3_1
+Name: X_Move_left_To_2_1
+pre: 2_1_empty X_left_3_1
+add: 4_1_empty X_left_2_1 X_right_3_1
+del: 2_1_empty X_left_3_1 X_right_4_1
+Name: X_Move_left_To_3_1
+pre: 3_1_empty X_left_4_1
+add: 5_1_empty X_left_3_1 X_right_4_1
+del: 3_1_empty X_left_4_1 X_right_5_1

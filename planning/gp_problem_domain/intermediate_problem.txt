@@ -1,0 +1,2 @@
+Initial State: 4_0_empty 5_0_empty 1_1_empty 2_1_empty 4_1_empty 5_1_empty 4_2_empty 5_2_empty 0_3_empty 1_3_empty 0_4_empty 1_4_empty 3_4_empty 4_4_empty 0_5_empty 1_5_empty A_left_1_0 A_right_2_0 Q_left_3_3 Q_right_5_3 R_left_2_5 R_right_4_5 O_up_0_0 O_down_0_2 P_up_3_0 P_down_3_2 B_up_2_3 B_down_2_4 E_up_5_4 E_down_5_5 X_left_1_2 X_right_2_2
+Goal State: X_right_5_2

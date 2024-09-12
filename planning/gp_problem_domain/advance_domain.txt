@@ -1,0 +1,195 @@
+Propositions:
+0_0_empty 0_1_empty 0_2_empty 0_3_empty 0_4_empty 0_5_empty 1_0_empty 1_1_empty 1_2_empty 1_3_empty 1_4_empty 1_5_empty 2_0_empty 2_1_empty 2_2_empty 2_3_empty 2_4_empty 2_5_empty 3_0_empty 3_1_empty 3_2_empty 3_3_empty 3_4_empty 3_5_empty 4_0_empty 4_1_empty 4_2_empty 4_3_empty 4_4_empty 4_5_empty 5_0_empty 5_1_empty 5_2_empty 5_3_empty 5_4_empty 5_5_empty A_left_0_0 A_right_1_0 A_left_1_0 A_right_2_0 A_left_2_0 A_right_3_0 A_left_3_0 A_right_4_0 A_left_4_0 A_right_5_0 Q_left_0_3 Q_right_2_3 Q_left_1_3 Q_right_3_3 Q_left_2_3 Q_right_4_3 Q_left_3_3 Q_right_5_3 R_left_0_5 R_right_2_5 R_left_1_5 R_right_3_5 R_left_2_5 R_right_4_5 R_left_3_5 R_right_5_5 B_up_2_0 B_down_2_1 B_up_2_1 B_down_2_2 B_up_2_2 B_down_2_3 B_up_2_3 B_down_2_4 B_up_2_4 B_down_2_5 O_up_3_0 O_down_3_2 O_up_3_1 O_down_3_3 O_up_3_2 O_down_3_4 O_up_3_3 O_down_3_5 P_up_0_0 P_down_0_2 P_up_0_1 P_down_0_3 P_up_0_2 P_down_0_4 P_up_0_3 P_down_0_5 X_left_0_2 X_right_1_2 X_left_1_2 X_right_2_2 X_left_2_2 X_right_3_2 X_left_3_2 X_right_4_2 X_left_4_2 X_right_5_2
+Actions:
+Name: A_Move_right_To_2_0
+pre: 2_0_empty A_right_1_0
+add: 0_0_empty A_right_2_0 A_left_1_0
+del: 2_0_empty A_right_1_0 A_left_0_0
+Name: A_Move_right_To_3_0
+pre: 3_0_empty A_right_2_0
+add: 1_0_empty A_right_3_0 A_left_2_0
+del: 3_0_empty A_right_2_0 A_left_1_0
+Name: A_Move_left_To_0_0
+pre: 0_0_empty A_left_1_0
+add: 2_0_empty A_left_0_0 A_right_1_0
+del: 0_0_empty A_left_1_0 A_right_2_0
+Name: A_Move_right_To_4_0
+pre: 4_0_empty A_right_3_0
+add: 2_0_empty A_right_4_0 A_left_3_0
+del: 4_0_empty A_right_3_0 A_left_2_0
+Name: A_Move_left_To_1_0
+pre: 1_0_empty A_left_2_0
+add: 3_0_empty A_left_1_0 A_right_2_0
+del: 1_0_empty A_left_2_0 A_right_3_0
+Name: A_Move_right_To_5_0
+pre: 5_0_empty A_right_4_0
+add: 3_0_empty A_right_5_0 A_left_4_0
+del: 5_0_empty A_right_4_0 A_left_3_0
+Name: A_Move_left_To_2_0
+pre: 2_0_empty A_left_3_0
+add: 4_0_empty A_left_2_0 A_right_3_0
+del: 2_0_empty A_left_3_0 A_right_4_0
+Name: A_Move_left_To_3_0
+pre: 3_0_empty A_left_4_0
+add: 5_0_empty A_left_3_0 A_right_4_0
+del: 3_0_empty A_left_4_0 A_right_5_0
+Name: Q_Move_right_To_3_3
+pre: 3_3_empty Q_right_2_3
+add: 0_3_empty Q_right_3_3 Q_left_1_3
+del: 3_3_empty Q_right_2_3 Q_left_0_3
+Name: Q_Move_right_To_4_3
+pre: 4_3_empty Q_right_3_3
+add: 1_3_empty Q_right_4_3 Q_left_2_3
+del: 4_3_empty Q_right_3_3 Q_left_1_3
+Name: Q_Move_left_To_0_3
+pre: 0_3_empty Q_left_1_3
+add: 3_3_empty Q_left_0_3 Q_right_2_3
+del: 0_3_empty Q_left_1_3 Q_right_3_3
+Name: Q_Move_right_To_5_3
+pre: 5_3_empty Q_right_4_3
+add: 2_3_empty Q_right_5_3 Q_left_3_3
+del: 5_3_empty Q_right_4_3 Q_left_2_3
+Name: Q_Move_left_To_1_3
+pre: 1_3_empty Q_left_2_3
+add: 4_3_empty Q_left_1_3 Q_right_3_3
+del: 1_3_empty Q_left_2_3 Q_right_4_3
+Name: Q_Move_left_To_2_3
+pre: 2_3_empty Q_left_3_3
+add: 5_3_empty Q_left_2_3 Q_right_4_3
+del: 2_3_empty Q_left_3_3 Q_right_5_3
+Name: R_Move_right_To_3_5
+pre: 3_5_empty R_right_2_5
+add: 0_5_empty R_right_3_5 R_left_1_5
+del: 3_5_empty R_right_2_5 R_left_0_5
+Name: R_Move_right_To_4_5
+pre: 4_5_empty R_right_3_5
+add: 1_5_empty R_right_4_5 R_left_2_5
+del: 4_5_empty R_right_3_5 R_left_1_5
+Name: R_Move_left_To_0_5
+pre: 0_5_empty R_left_1_5
+add: 3_5_empty R_left_0_5 R_right_2_5
+del: 0_5_empty R_left_1_5 R_right_3_5
+Name: R_Move_right_To_5_5
+pre: 5_5_empty R_right_4_5
+add: 2_5_empty R_right_5_5 R_left_3_5
+del: 5_5_empty R_right_4_5 R_left_2_5
+Name: R_Move_left_To_1_5
+pre: 1_5_empty R_left_2_5
+add: 4_5_empty R_left_1_5 R_right_3_5
+del: 1_5_empty R_left_2_5 R_right_4_5
+Name: R_Move_left_To_2_5
+pre: 2_5_empty R_left_3_5
+add: 5_5_empty R_left_2_5 R_right_4_5
+del: 2_5_empty R_left_3_5 R_right_5_5
+Name: B_Move_down_To_2_2
+pre: 2_2_empty B_down_2_1
+add: 2_0_empty B_down_2_2 B_up_2_1
+del: 2_2_empty B_down_2_1 B_up_2_0
+Name: B_Move_down_To_2_3
+pre: 2_3_empty B_down_2_2
+add: 2_1_empty B_down_2_3 B_up_2_2
+del: 2_3_empty B_down_2_2 B_up_2_1
+Name: B_Move_up_To_2_0
+pre: 2_0_empty B_up_2_1
+add: 2_2_empty B_up_2_0 B_down_2_1
+del: 2_0_empty B_up_2_1 B_down_2_2
+Name: B_Move_down_To_2_4
+pre: 2_4_empty B_down_2_3
+add: 2_2_empty B_down_2_4 B_up_2_3
+del: 2_4_empty B_down_2_3 B_up_2_2
+Name: B_Move_up_To_2_1
+pre: 2_1_empty B_up_2_2
+add: 2_3_empty B_up_2_1 B_down_2_2
+del: 2_1_empty B_up_2_2 B_down_2_3
+Name: B_Move_down_To_2_5
+pre: 2_5_empty B_down_2_4
+add: 2_3_empty B_down_2_5 B_up_2_4
+del: 2_5_empty B_down_2_4 B_up_2_3
+Name: B_Move_up_To_2_2
+pre: 2_2_empty B_up_2_3
+add: 2_4_empty B_up_2_2 B_down_2_3
+del: 2_2_empty B_up_2_3 B_down_2_4
+Name: B_Move_up_To_2_3
+pre: 2_3_empty B_up_2_4
+add: 2_5_empty B_up_2_3 B_down_2_4
+del: 2_3_empty B_up_2_4 B_down_2_5
+Name: O_Move_down_To_3_3
+pre: 3_3_empty O_down_3_2
+add: 3_0_empty O_down_3_3 O_up_3_1
+del: 3_3_empty O_down_3_2 O_up_3_0
+Name: O_Move_down_To_3_4
+pre: 3_4_empty O_down_3_3
+add: 3_1_empty O_down_3_4 O_up_3_2
+del: 3_4_empty O_down_3_3 O_up_3_1
+Name: O_Move_up_To_3_0
+pre: 3_0_empty O_up_3_1
+add: 3_3_empty O_up_3_0 O_down_3_2
+del: 3_0_empty O_up_3_1 O_down_3_3
+Name: O_Move_down_To_3_5
+pre: 3_5_empty O_down_3_4
+add: 3_2_empty O_down_3_5 O_up_3_3
+del: 3_5_empty O_down_3_4 O_up_3_2
+Name: O_Move_up_To_3_1
+pre: 3_1_empty O_up_3_2
+add: 3_4_empty O_up_3_1 O_down_3_3
+del: 3_1_empty O_up_3_2 O_down_3_4
+Name: O_Move_up_To_3_2
+pre: 3_2_empty O_up_3_3
+add: 3_5_empty O_up_3_2 O_down_3_4
+del: 3_2_empty O_up_3_3 O_down_3_5
+Name: P_Move_down_To_0_3
+pre: 0_3_empty P_down_0_2
+add: 0_0_empty P_down_0_3 P_up_0_1
+del: 0_3_empty P_down_0_2 P_up_0_0
+Name: P_Move_down_To_0_4
+pre: 0_4_empty P_down_0_3
+add: 0_1_empty P_down_0_4 P_up_0_2
+del: 0_4_empty P_down_0_3 P_up_0_1
+Name: P_Move_up_To_0_0
+pre: 0_0_empty P_up_0_1
+add: 0_3_empty P_up_0_0 P_down_0_2
+del: 0_0_empty P_up_0_1 P_down_0_3
+Name: P_Move_down_To_0_5
+pre: 0_5_empty P_down_0_4
+add: 0_2_empty P_down_0_5 P_up_0_3
+del: 0_5_empty P_down_0_4 P_up_0_2
+Name: P_Move_up_To_0_1
+pre: 0_1_empty P_up_0_2
+add: 0_4_empty P_up_0_1 P_down_0_3
+del: 0_1_empty P_up_0_2 P_down_0_4
+Name: P_Move_up_To_0_2
+pre: 0_2_empty P_up_0_3
+add: 0_5_empty P_up_0_2 P_down_0_4
+del: 0_2_empty P_up_0_3 P_down_0_5
+Name: X_Move_right_To_2_2
+pre: 2_2_empty X_right_1_2
+add: 0_2_empty X_right_2_2 X_left_1_2
+del: 2_2_empty X_right_1_2 X_left_0_2
+Name: X_Move_right_To_3_2
+pre: 3_2_empty X_right_2_2
+add: 1_2_empty X_right_3_2 X_left_2_2
+del: 3_2_empty X_right_2_2 X_left_1_2
+Name: X_Move_left_To_0_2
+pre: 0_2_empty X_left_1_2
+add: 2_2_empty X_left_0_2 X_right_1_2
+del: 0_2_empty X_left_1_2 X_right_2_2
+Name: X_Move_right_To_4_2
+pre: 4_2_empty X_right_3_2
+add: 2_2_empty X_right_4_2 X_left_3_2
+del: 4_2_empty X_right_3_2 X_left_2_2
+Name: X_Move_left_To_1_2
+pre: 1_2_empty X_left_2_2
+add: 3_2_empty X_left_1_2 X_right_2_2
+del: 1_2_empty X_left_2_2 X_right_3_2
+Name: X_Move_right_To_5_2
+pre: 5_2_empty X_right_4_2
+add: 3_2_empty X_right_5_2 X_left_4_2
+del: 5_2_empty X_right_4_2 X_left_3_2
+Name: X_Move_left_To_2_2
+pre: 2_2_empty X_left_3_2
+add: 4_2_empty X_left_2_2 X_right_3_2
+del: 2_2_empty X_left_3_2 X_right_4_2
+Name: X_Move_left_To_3_2
+pre: 3_2_empty X_left_4_2
+add: 5_2_empty X_left_3_2 X_right_4_2
+del: 3_2_empty X_left_4_2 X_right_5_2

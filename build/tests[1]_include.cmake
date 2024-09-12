@@ -1,0 +1,5 @@
+if(EXISTS "/Users/giladticher/Library/CloudStorage/GoogleDrive-gilad.ticher@mail.huji.ac.il/.shortcut-targets-by-id/1DGBwIAt-2_JgJSIpDESVNxULzhKFkvrv/AI Final Project/rushhour-cpp/build/tests[1]_tests.cmake")
+  include("/Users/giladticher/Library/CloudStorage/GoogleDrive-gilad.ticher@mail.huji.ac.il/.shortcut-targets-by-id/1DGBwIAt-2_JgJSIpDESVNxULzhKFkvrv/AI Final Project/rushhour-cpp/build/tests[1]_tests.cmake")
+else()
+  add_test(tests_NOT_BUILT tests_NOT_BUILT)
+endif()
