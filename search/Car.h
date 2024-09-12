@@ -7,7 +7,7 @@ struct Position {
 };
 
 class Car {
-public:
+  public:
     char id;           // Unique identifier for the car
     Position position; // Starting position of the car
     bool isHorizontal; // Orientation of the car

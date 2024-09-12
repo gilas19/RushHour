@@ -63,11 +63,19 @@ def generate_adverserial_experiments(experiments):
     add_experiments(experiments, adv_boards, "alphabeta", "twoPlayers", "mcts", "nullHeuristic")
 
 
+# def custom_experiments(experiments):
+#     """Generates custom experiments for the given board and algorithm."""
+#     add_experiments(experiments, boards, "bfs")
+#     add_experiments(experiments, boards, "astar", "singlePlayer")
+#     add_experiments(experiments, adv_boards, "alphabeta", "twoPlayers", "randomAdv", "nullHeuristic")
+
+
 def main():
     """Main function to run all experiment generation and save results to a file."""
     all_experiments = []
     generate_basic_experiments(all_experiments)
     generate_adverserial_experiments(all_experiments)
+    # custom_experiments(all_experiments)
     with open("experiments.txt", "w") as file:
         for experiment in all_experiments:
             file.write(" ".join(experiment) + "\n")

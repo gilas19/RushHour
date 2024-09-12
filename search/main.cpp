@@ -1,22 +1,21 @@
 // main.cpp
 
 #include "Board.h"
-#include "SearchAlgorithms.h"
-#include <iostream>
-#include <fstream>
-#include <map>
 #include "Heuristics.h"
-#include <string>
-#include <ctime>
+#include "SearchAlgorithms.h"
 #include "SearchResult.h"
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <string>
 
 #define RESULTS_DIR "../results/"
 #define SOLUTIONS_DIR "../results/solutions/"
 #define RESULTS_FILE "../results/results.csv"
 #define EXPERIMENTS_FILE "../experiments.txt"
 
-
-int run_experiment(char* argv[], bool printBoard = false) {
+int run_experiment(char *argv[], bool printBoard = false) {
     Board board(argv[1]);
     if (board.gridSize == 0) {
         return 1;
@@ -29,18 +28,15 @@ int run_experiment(char* argv[], bool printBoard = false) {
     if (algorithm == "random") {
         result.printHeader();
         SearchAlgorithms::Random(board, Player::HORIZONTAL, result);
-    }
-    else if (algorithm == "bfs") {
+    } else if (algorithm == "bfs") {
         result.printHeader();
         SearchAlgorithms::BFS(board, result);
-    }
-    else if (algorithm == "astar") {
+    } else if (algorithm == "astar") {
         result.heuristic = argv[3];
         HeuristicFunc heuristic = Heuristics::factory(argv[3]);
         result.printHeader();
         SearchAlgorithms::AStar(board, heuristic, result);
-    }
-    else if (algorithm == "alphabeta" || algorithm == "randomAdv" || algorithm == "mcts") {
+    } else if (algorithm == "alphabeta" || algorithm == "randomAdv" || algorithm == "mcts") {
         AdverserialPlayers players;
         players.Agent = result.algorithm = argv[2];
         players.Opponent = result.opponent = argv[4];
@@ -50,17 +46,16 @@ int run_experiment(char* argv[], bool printBoard = false) {
         result.opponentHeuristic = argv[5];
         result.printHeader();
         SearchAlgorithms::AdverserialGame(board, players, result);
-    }
-    else {
+    } else {
         std::cerr << "Error: Invalid algorithm" << std::endl;
         return 1;
     }
 
     if (result.winner == Player::NULLPLAYER) {
         std::cout << "No solution found!" << std::endl;
-    }
-    else {
-        std::cout << "Player " << (result.winner == Player::HORIZONTAL ? "HORIZONTAL" : "VERTICAL") << " wins!" << std::endl;
+    } else {
+        std::cout << "Player " << (result.winner == Player::HORIZONTAL ? "HORIZONTAL" : "VERTICAL") << " wins!"
+                  << std::endl;
     }
     result.writeSolutionToFile(SOLUTIONS_DIR);
     result.writeToCSV(RESULTS_FILE);
@@ -78,9 +73,8 @@ int experiments(std::string filename) {
         return 1;
     }
     std::string line;
-    char* argv[100];
+    char *argv[100];
     std::cout << "Running experiments from file " << filename << std::endl;
-    return 0;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
         std::string token;
@@ -96,12 +90,13 @@ int experiments(std::string filename) {
     return 0;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     if (std::string(argv[1]) == "experiments.txt") {
         return experiments(argv[1]);
     }
     if (argc < 3) {
-        std::cout << "Usage: rushhour <board file> <algorithm> <heuristic> <opponent> <opponent heuristic>" << std::endl;
+        std::cout << "Usage: rushhour <board file> <algorithm> <heuristic> <opponent> <opponent heuristic>"
+                  << std::endl;
         return 1;
     }
     return run_experiment(argv, false);

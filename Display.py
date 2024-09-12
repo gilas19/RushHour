@@ -31,9 +31,7 @@ class GameBoard:
                         vehicles[vehicle]["end"] = (row, col)
                         vehicles[vehicle]["size"] += 1
                         if vehicles[vehicle]["horizontal"] is None:
-                            vehicles[vehicle]["horizontal"] = (
-                                row == vehicles[vehicle]["start"][0]
-                            )
+                            vehicles[vehicle]["horizontal"] = row == vehicles[vehicle]["start"][0]
         return vehicles
 
     def locate_vehicle(self, vehicle):
@@ -198,9 +196,7 @@ class GUIView:
             if two_players:
                 player = "Player 1's Turn" if move[3] == "X" else "Player 2's Turn"
                 color = "red" if move[3] == "X" else "blue"
-                ax.text(
-                    0.8, 1.05, player, transform=ax.transAxes, ha="right", color=color
-                )
+                ax.text(0.8, 1.05, player, transform=ax.transAxes, ha="right", color=color)
 
     def _draw_vehicles(self, board, ax):
         """Draws the vehicles on the board and returns the red and blue car positions."""
@@ -208,9 +204,7 @@ class GUIView:
         for i, row in enumerate(board.grid):
             for j, cell in enumerate(row):
                 color = self.VEHICLE_COLORS.get(cell, "white")
-                ax.add_patch(
-                    patches.Rectangle((j, i), 1, 1, edgecolor="black", facecolor=color)
-                )
+                ax.add_patch(patches.Rectangle((j, i), 1, 1, edgecolor="black", facecolor=color))
                 if color == "red":
                     red_car_row = i
                 if color == "blue":
@@ -323,9 +317,7 @@ class GUIView:
 
         fig, ax = plt.subplots()
         solution.insert(0, None)
-        ani = animation.FuncAnimation(
-            fig, animate, frames=len(solution), interval=100, repeat=False
-        )
+        ani = animation.FuncAnimation(fig, animate, frames=len(solution), interval=100, repeat=False)
 
         if save_path:
             ani.save(save_path, writer="pillow", fps=fps)
@@ -365,9 +357,7 @@ def main(solution_filename: str) -> None:
         two_players: bool = False,
     ) -> None:
         solution = view.load_solution(solution_file)
-        view.animate_solution(
-            board, solution, save_path=output_file, two_players=two_players
-        )
+        view.animate_solution(board, solution, save_path=output_file, two_players=two_players)
 
     view = GUIView()
     solution_name = solution_filename.split(".")[0]

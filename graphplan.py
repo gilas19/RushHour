@@ -16,12 +16,8 @@ def main(board):
     with open(board_filename, "r") as file:
         content = file.read().splitlines()
 
-    main_vehicle, horizontal_vehicles, vertical_vehicles, empty_squares = (
-        parse_vehicle_list(content[1:])
-    )
-    create_domain_file(
-        domain_filename, main_vehicle, horizontal_vehicles, vertical_vehicles
-    )
+    main_vehicle, horizontal_vehicles, vertical_vehicles, empty_squares = parse_vehicle_list(content[1:])
+    create_domain_file(domain_filename, main_vehicle, horizontal_vehicles, vertical_vehicles)
     create_problem_file(
         problem_filename,
         main_vehicle,
@@ -35,10 +31,7 @@ def main(board):
     plan = gp.graph_plan()
     elapsed = time.perf_counter() - start
     if plan is not None:
-        print(
-            "Plan found with %d actions in %.6f seconds"
-            % (len([act for act in plan if not act.is_noop()]), elapsed)
-        )
+        print("Plan found with %d actions in %.6f seconds" % (len([act for act in plan if not act.is_noop()]), elapsed))
         solution = parse_solution(plan)
         print(solution)
     else:

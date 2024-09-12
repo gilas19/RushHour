@@ -10,16 +10,14 @@ Board::Board(std::string filename) {
     }
 
     file >> gridSize;
-    grid = std::vector<std::vector<char>>(gridSize,
-                                          std::vector<char>(gridSize, '.'));
+    grid = std::vector<std::vector<char>>(gridSize, std::vector<char>(gridSize, '.'));
     char id;
     for (int row = 0; row < gridSize; ++row) {
         for (int col = 0; col < gridSize; ++col) {
             file >> id;
             if (id != '.') {
                 std::vector<Car>::iterator it =
-                    std::find_if(cars.begin(), cars.end(),
-                                 [id](Car car) { return car.id == id; });
+                    std::find_if(cars.begin(), cars.end(), [id](Car car) { return car.id == id; });
                 if (it == cars.end()) {
                     if (col + 1 < gridSize && file.peek() == id) {
                         cars.push_back(Car(id, {col, row}, true, 1));
@@ -60,24 +58,20 @@ void Board::printBoard() const {
 
 void Board::printCars() const {
     for (const auto &car : cars) {
-        std::cout << "Car " << car.id << " at (" << car.position.x << ", "
-                  << car.position.y << ") ";
-        std::cout << (car.isHorizontal ? "horizontally" : "vertically")
-                  << " with length " << car.length << std::endl;
+        std::cout << "Car " << car.id << " at (" << car.position.x << ", " << car.position.y << ") ";
+        std::cout << (car.isHorizontal ? "horizontally" : "vertically") << " with length " << car.length << std::endl;
     }
 }
 
 bool Board::legalPlace(int x, int y) const {
-    return x >= 0 && x < gridSize && y >= 0 && y < gridSize &&
-           grid[y][x] == '.';
+    return x >= 0 && x < gridSize && y >= 0 && y < gridSize && grid[y][x] == '.';
 }
 
 bool Board::canMove(const Car &car, MoveDirection dir, int steps) const {
     if (car.isHorizontal) {
         if (dir == MoveDirection::FORTH) {
             for (int i = 0; i < steps; ++i) {
-                if (!legalPlace(car.position.x + car.length + i,
-                                car.position.y)) {
+                if (!legalPlace(car.position.x + car.length + i, car.position.y)) {
                     return false;
                 }
             }
@@ -91,8 +85,7 @@ bool Board::canMove(const Car &car, MoveDirection dir, int steps) const {
     } else {
         if (dir == MoveDirection::FORTH) {
             for (int i = 0; i < steps; ++i) {
-                if (!legalPlace(car.position.x,
-                                car.position.y + car.length + i)) {
+                if (!legalPlace(car.position.x, car.position.y + car.length + i)) {
                     return false;
                 }
             }
@@ -114,9 +107,7 @@ bool Board::applyMove(const Move &move) {
     for (auto &car : cars) {
         if (car.id == move.carId) {
             if (canMove(car, move.direction, move.steps)) {
-                int shift = (move.direction == MoveDirection::FORTH)
-                                ? move.steps
-                                : -move.steps;
+                int shift = (move.direction == MoveDirection::FORTH) ? move.steps : -move.steps;
                 if (car.isHorizontal) {
                     car.position.x += shift;
                 } else {
@@ -134,35 +125,29 @@ bool Board::applyMove(const Move &move) {
 std::vector<Move> Board::generatePossibleMoves(Player player) const {
     std::vector<Move> possibleMoves;
     for (const auto &car : cars) {
-        if ((player != Player::HORIZONTAL || car.id == 'Y') &&
-            (player != Player::VERTICAL || car.id == 'X')) {
+        if ((player != Player::HORIZONTAL || car.id == 'Y') && (player != Player::VERTICAL || car.id == 'X')) {
             continue;
         }
         for (int steps = 1; steps <= 4; ++steps) { // Allow up to 4 steps
             if (canMove(car, MoveDirection::FORTH, steps)) {
-                possibleMoves.push_back(
-                    Move(car.id, MoveDirection::FORTH, steps, player));
+                possibleMoves.push_back(Move(car.id, MoveDirection::FORTH, steps, player));
             }
             if (canMove(car, MoveDirection::BACK, steps)) {
-                possibleMoves.push_back(
-                    Move(car.id, MoveDirection::BACK, steps, player));
+                possibleMoves.push_back(Move(car.id, MoveDirection::BACK, steps, player));
             }
         }
     }
 
-    std::shuffle(possibleMoves.begin(), possibleMoves.end(),
-                 std::mt19937(std::random_device()()));
+    std::shuffle(possibleMoves.begin(), possibleMoves.end(), std::mt19937(std::random_device()()));
     return possibleMoves;
 }
 
 bool Board::isWon(Player player) const {
     for (const auto &car : cars) {
-        if (car.id == 'X' && player == Player::HORIZONTAL &&
-            car.position.x + car.length - 1 == gridSize - 1) {
+        if (car.id == 'X' && player == Player::HORIZONTAL && car.position.x + car.length - 1 == gridSize - 1) {
             return true;
         }
-        if (car.id == 'Y' && player == Player::VERTICAL &&
-            car.position.y + car.length - 1 == gridSize - 1) {
+        if (car.id == 'Y' && player == Player::VERTICAL && car.position.y + car.length - 1 == gridSize - 1) {
             return true;
         }
     }

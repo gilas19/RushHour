@@ -6,8 +6,7 @@
 #include <queue>
 #include <unordered_set>
 
-std::vector<Move> SearchAlgorithms::Random(Board &board, Player player,
-                                           SearchResult &result) {
+std::vector<Move> SearchAlgorithms::Random(Board &board, Player player, SearchResult &result) {
     std::clock_t startTime = clock();
     std::vector<Move> solution;
     std::vector<Move> possibleMoves = board.generatePossibleMoves(player);
@@ -28,8 +27,7 @@ std::vector<Move> SearchAlgorithms::Random(Board &board, Player player,
     return solution;
 }
 
-std::vector<Move> SearchAlgorithms::BFS(Board &board, SearchResult &result,
-                                        Player player) {
+std::vector<Move> SearchAlgorithms::BFS(Board &board, SearchResult &result, Player player) {
     std::clock_t startTime = clock();
     std::queue<BoardState> frontier;
     std::unordered_set<std::size_t> visited;
@@ -65,16 +63,12 @@ std::vector<Move> SearchAlgorithms::BFS(Board &board, SearchResult &result,
 }
 
 struct CompareBoardState {
-    bool operator()(const BoardState &a, const BoardState &b) {
-        return a.f() > b.f();
-    }
+    bool operator()(const BoardState &a, const BoardState &b) { return a.f() > b.f(); }
 };
 
-std::vector<Move> SearchAlgorithms::AStar(Board &board, HeuristicFunc heuristic,
-                                          SearchResult &result, Player player) {
+std::vector<Move> SearchAlgorithms::AStar(Board &board, HeuristicFunc heuristic, SearchResult &result, Player player) {
     std::clock_t startTime = clock();
-    std::priority_queue<BoardState, std::vector<BoardState>, CompareBoardState>
-        frontier;
+    std::priority_queue<BoardState, std::vector<BoardState>, CompareBoardState> frontier;
     std::unordered_set<std::size_t> visited;
     int expandedNodes = 0;
 
@@ -98,8 +92,7 @@ std::vector<Move> SearchAlgorithms::AStar(Board &board, HeuristicFunc heuristic,
             if (visited.find(newBoard.hash()) == visited.end()) {
                 std::vector<Move> newMoves = current.moves;
                 newMoves.push_back(move);
-                frontier.push({newBoard, newMoves, current.g + 1,
-                               heuristic(newBoard, player)});
+                frontier.push({newBoard, newMoves, current.g + 1, heuristic(newBoard, player)});
                 visited.insert(newBoard.hash());
             }
         }
@@ -108,16 +101,11 @@ std::vector<Move> SearchAlgorithms::AStar(Board &board, HeuristicFunc heuristic,
     return {};
 }
 
-Move SearchAlgorithms::RandomAdv(Board &board, Player player) {
-    return board.generatePossibleMoves(player).front();
-}
+Move SearchAlgorithms::RandomAdv(Board &board, Player player) { return board.generatePossibleMoves(player).front(); }
 
-int minimax(Board &board, int depth, int alpha, int beta,
-            bool isMaximizingPlayer, Player currentPlayer,
+int minimax(Board &board, int depth, int alpha, int beta, bool isMaximizingPlayer, Player currentPlayer,
             HeuristicFunc evaluate) {
-    Player opponent = (currentPlayer == Player::HORIZONTAL)
-                          ? Player::VERTICAL
-                          : Player::HORIZONTAL;
+    Player opponent = (currentPlayer == Player::HORIZONTAL) ? Player::VERTICAL : Player::HORIZONTAL;
 
     if (depth == 0 || board.isWon(currentPlayer) || board.isWon(opponent)) {
         return evaluate(board, currentPlayer);
@@ -128,8 +116,7 @@ int minimax(Board &board, int depth, int alpha, int beta,
         for (const auto &move : board.generatePossibleMoves(currentPlayer)) {
             Board tempBoard(board);
             tempBoard.applyMove(move);
-            int eval = minimax(tempBoard, depth - 1, alpha, beta, false,
-                               currentPlayer, evaluate);
+            int eval = minimax(tempBoard, depth - 1, alpha, beta, false, currentPlayer, evaluate);
             maxEval = std::max(maxEval, eval);
             alpha = std::max(alpha, eval);
             if (beta <= alpha)
@@ -141,8 +128,7 @@ int minimax(Board &board, int depth, int alpha, int beta,
         for (const auto &move : board.generatePossibleMoves(opponent)) {
             Board tempBoard(board);
             tempBoard.applyMove(move);
-            int eval = minimax(tempBoard, depth, alpha, beta, true,
-                               currentPlayer, evaluate);
+            int eval = minimax(tempBoard, depth, alpha, beta, true, currentPlayer, evaluate);
             minEval = std::min(minEval, eval);
             beta = std::min(beta, eval);
             if (beta <= alpha)
@@ -152,8 +138,7 @@ int minimax(Board &board, int depth, int alpha, int beta,
     }
 }
 
-Move SearchAlgorithms::AlphaBeta(Board &board, Player player,
-                                 HeuristicFunc heuristic, int depth) {
+Move SearchAlgorithms::AlphaBeta(Board &board, Player player, HeuristicFunc heuristic, int depth) {
     int bestValue = std::numeric_limits<int>::min();
     Move bestMove;
     Board tempBoard(board);
@@ -161,9 +146,8 @@ Move SearchAlgorithms::AlphaBeta(Board &board, Player player,
     for (const auto &move : board.generatePossibleMoves(player)) {
         tempBoard = Board(board);
         tempBoard.applyMove(move);
-        int moveValue =
-            minimax(tempBoard, depth - 1, std::numeric_limits<int>::min(),
-                    std::numeric_limits<int>::max(), false, player, heuristic);
+        int moveValue = minimax(tempBoard, depth - 1, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(),
+                                false, player, heuristic);
 
         if (moveValue > bestValue) {
             bestValue = moveValue;
@@ -174,18 +158,13 @@ Move SearchAlgorithms::AlphaBeta(Board &board, Player player,
 }
 
 MCTSNode *expand(MCTSNode *node) {
-    std::vector<Move> possibleMoves =
-        node->board.generatePossibleMoves(node->player);
+    std::vector<Move> possibleMoves = node->board.generatePossibleMoves(node->player);
     for (const auto &move : possibleMoves) {
         if (std::find_if(node->children.begin(), node->children.end(),
-                         [&move](const MCTSNode *child) {
-                             return child->move == move;
-                         }) == node->children.end()) {
+                         [&move](const MCTSNode *child) { return child->move == move; }) == node->children.end()) {
             Board newBoard = node->board;
             newBoard.applyMove(move);
-            Player nextPlayer = (node->player == Player::HORIZONTAL)
-                                    ? Player::VERTICAL
-                                    : Player::HORIZONTAL;
+            Player nextPlayer = (node->player == Player::HORIZONTAL) ? Player::VERTICAL : Player::HORIZONTAL;
             MCTSNode *newNode = new MCTSNode(newBoard, move, nextPlayer, node);
             node->children.push_back(newNode);
             return newNode;
@@ -198,12 +177,8 @@ MCTSNode *getBestChild(MCTSNode *node, double explorationParameter) {
     return *std::max_element(
         node->children.begin(), node->children.end(),
         [explorationParameter, node](const MCTSNode *a, const MCTSNode *b) {
-            double uctA = a->score / a->visits +
-                          explorationParameter *
-                              std::sqrt(std::log(node->visits) / a->visits);
-            double uctB = b->score / b->visits +
-                          explorationParameter *
-                              std::sqrt(std::log(node->visits) / b->visits);
+            double uctA = a->score / a->visits + explorationParameter * std::sqrt(std::log(node->visits) / a->visits);
+            double uctB = b->score / b->visits + explorationParameter * std::sqrt(std::log(node->visits) / b->visits);
             return uctA < uctB;
         });
 }
@@ -222,18 +197,14 @@ double simulate(MCTSNode *node) {
     Board tempBoard = node->board;
     Player currentPlayer = node->player;
 
-    while (!tempBoard.isWon(Player::HORIZONTAL) &&
-           !tempBoard.isWon(Player::VERTICAL)) {
-        std::vector<Move> possibleMoves =
-            tempBoard.generatePossibleMoves(currentPlayer);
+    while (!tempBoard.isWon(Player::HORIZONTAL) && !tempBoard.isWon(Player::VERTICAL)) {
+        std::vector<Move> possibleMoves = tempBoard.generatePossibleMoves(currentPlayer);
         if (possibleMoves.empty())
             break;
 
         Move randomMove = possibleMoves[rand() % possibleMoves.size()];
         tempBoard.applyMove(randomMove);
-        currentPlayer = (currentPlayer == Player::HORIZONTAL)
-                            ? Player::VERTICAL
-                            : Player::HORIZONTAL;
+        currentPlayer = (currentPlayer == Player::HORIZONTAL) ? Player::VERTICAL : Player::HORIZONTAL;
     }
 
     if (tempBoard.isWon(Player::HORIZONTAL))
@@ -252,8 +223,7 @@ void backpropagate(MCTSNode *node, double score) {
     }
 }
 
-Move SearchAlgorithms::MCTS(Board &board, Player player, int numIterations,
-                            double explorationParameter) {
+Move SearchAlgorithms::MCTS(Board &board, Player player, int numIterations, double explorationParameter) {
     MCTSNode root(board, Move(), player);
 
     for (int i = 0; i < numIterations; ++i) {
@@ -262,11 +232,8 @@ Move SearchAlgorithms::MCTS(Board &board, Player player, int numIterations,
         backpropagate(node, score);
     }
 
-    MCTSNode *bestChild =
-        *std::max_element(root.children.begin(), root.children.end(),
-                          [](const MCTSNode *a, const MCTSNode *b) {
-                              return a->visits < b->visits;
-                          });
+    MCTSNode *bestChild = *std::max_element(root.children.begin(), root.children.end(),
+                                            [](const MCTSNode *a, const MCTSNode *b) { return a->visits < b->visits; });
 
     if (bestChild->move.carId == '\0') {
         return Move();
@@ -274,15 +241,12 @@ Move SearchAlgorithms::MCTS(Board &board, Player player, int numIterations,
     return bestChild->move;
 }
 
-std::vector<Move> SearchAlgorithms::AdverserialGame(Board &board,
-                                                    AdverserialPlayers players,
-                                                    SearchResult &result) {
+std::vector<Move> SearchAlgorithms::AdverserialGame(Board &board, AdverserialPlayers players, SearchResult &result) {
     std::clock_t startTime = clock();
     std::vector<Move> moves;
     Player currentPlayer = Player::HORIZONTAL;
     Move move;
-    while (
-        (!board.isWon(Player::HORIZONTAL) && !board.isWon(Player::VERTICAL))) {
+    while ((!board.isWon(Player::HORIZONTAL) && !board.isWon(Player::VERTICAL))) {
         std::cout << moves.size() << std::endl;
         if (moves.size() == MOVES_LIMIT) {
             std::cout << "Moves limit reached" << std::endl;
@@ -303,18 +267,13 @@ std::vector<Move> SearchAlgorithms::AdverserialGame(Board &board,
             } else if (players.Opponent == "mcts") {
                 move = MCTS(board, currentPlayer);
             } else {
-                move =
-                    AlphaBeta(board, currentPlayer, players.OpponentHeuristic);
+                move = AlphaBeta(board, currentPlayer, players.OpponentHeuristic);
             }
         }
         moves.push_back(move);
         board.applyMove(move);
-        currentPlayer = (currentPlayer == Player::HORIZONTAL)
-                            ? Player::VERTICAL
-                            : Player::HORIZONTAL;
+        currentPlayer = (currentPlayer == Player::HORIZONTAL) ? Player::VERTICAL : Player::HORIZONTAL;
     }
-    result.updateSolution(moves, startTime,
-                          (board.isWon(Player::HORIZONTAL)) ? Player::HORIZONTAL
-                                                            : Player::VERTICAL);
+    result.updateSolution(moves, startTime, (board.isWon(Player::HORIZONTAL)) ? Player::HORIZONTAL : Player::VERTICAL);
     return moves;
 }
