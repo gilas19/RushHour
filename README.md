@@ -12,21 +12,22 @@ This project demonstrates the application of AI techniques to solve and analyze 
 
 ## How to Build
 
-* Clone the repository
+Clone the repository
 ```
 git clone https://github.com/gilas19/RushHour.git
 ```
+* **_Note:_** if using docker, run the following commands to build the project and run the container:
+    ```
+    docker build -t rushhour .
+    docker run -it rushhour
+    ```
 
-* Open directory and build the project
+Open directory and build the project
 ```
 mkdir build && cd build && cmake .. && make
 ```
 
-**_Note:_** if using docker, run the following commands to build the project and run the container:
-```
-docker build -t rushhour .
-docker run -it rushhour
-```
+
 
 ## Regular Game Solver
 ### Search Algorithm
