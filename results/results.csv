@@ -159,3 +159,9 @@ adv_sample1,alphabeta,twoPlayers,mcts,nullHeuristic,2500,56.1024,0,None
 adv_sample2,alphabeta,twoPlayers,mcts,nullHeuristic,2500,276.176,0,None
 adv_sample3,alphabeta,twoPlayers,mcts,nullHeuristic,2500,167.994,0,None
 sample1,bfs,,,,2,0.00364,24,X
+sample1,bfs,,,,2,0.006189,65,X
+sample1,bfs,,,,2,0.004185,38,X
+sample1,bfs,,,,2,0.002291,18,X
+sample1,bfs,,,,2,0.005376,50,X
+sample1,bfs,,,,2,0.002456,23,X
+sample1,bfs,,,,2,0.005345,53,X

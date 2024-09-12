@@ -71,14 +71,16 @@ int run_experiment(char* argv[], bool printBoard = false) {
     return 0;
 }
 
-int experiments() {
-    std::ifstream file("experiments.txt");
+int experiments(std::string filename) {
+    std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open file experiments.txt" << std::endl;
+        std::cerr << "Error: Could not open file " << filename << std::endl;
         return 1;
     }
     std::string line;
     char* argv[100];
+    std::cout << "Running experiments from file " << filename << std::endl;
+    return 0;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
         std::string token;
@@ -96,7 +98,7 @@ int experiments() {
 
 int main(int argc, char* argv[]) {
     if (std::string(argv[1]) == "experiments.txt") {
-        return experiments();
+        return experiments(argv[1]);
     }
     if (argc < 3) {
         std::cout << "Usage: rushhour <board file> <algorithm> <heuristic> <opponent> <opponent heuristic>" << std::endl;

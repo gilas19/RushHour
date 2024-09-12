@@ -5,6 +5,10 @@
 #include "SearchAlgorithms.h"
 #include "Heuristics.h"
 
+#include <cstdio>
+#include <string>
+#include <fstream>
+
 class CarTest : public ::testing::Test {
 protected:
     Car* car;
@@ -135,6 +139,40 @@ TEST_F(SearchAlgorithmsTest, AlphaBeta) {
 TEST_F(SearchAlgorithmsTest, MCTS) {
     Move move = SearchAlgorithms::MCTS(*board, Player::HORIZONTAL);
     EXPECT_NE(move.carId, '\0');
+}
+
+class MainTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        old_stdout = dup(fileno(stdout));
+        freopen("output.txt", "w", stdout);
+    }
+
+    // Restore stdout
+    void TearDown() override {
+        fflush(stdout);
+        dup2(old_stdout, fileno(stdout));
+        close(old_stdout);
+        remove("output.txt");
+    }
+
+    std::string getCapturedOutput() {
+        std::ifstream ifs("output.txt");
+        return std::string((std::istreambuf_iterator<char>(ifs)),
+                           (std::istreambuf_iterator<char>()));
+    }
+
+    int old_stdout;
+};
+
+TEST_F(MainTest, RunWithBFS) {
+    const std::string cmd = "./rushhour sample1.txt bfs";
+    system(cmd.c_str());
+    
+    std::string output = getCapturedOutput();
+    EXPECT_FALSE(output.empty());
+    EXPECT_TRUE(output.find("Board: sample1	Algorithm: bfs	") != std::string::npos);
+    EXPECT_TRUE(output.find("Player HORIZONTAL wins!") != std::string::npos);
 }
 
 int main(int argc, char **argv) {

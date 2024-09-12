@@ -1,3 +1,0 @@
-add_test([=[CarTest.Constructor]=]  [==[/Users/giladticher/Library/CloudStorage/GoogleDrive-gilad.ticher@mail.huji.ac.il/.shortcut-targets-by-id/1DGBwIAt-2_JgJSIpDESVNxULzhKFkvrv/AI Final Project/rushhour-cpp/build/tests]==] [==[--gtest_filter=CarTest.Constructor]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[CarTest.Constructor]=]  PROPERTIES WORKING_DIRECTORY [==[/Users/giladticher/Library/CloudStorage/GoogleDrive-gilad.ticher@mail.huji.ac.il/.shortcut-targets-by-id/1DGBwIAt-2_JgJSIpDESVNxULzhKFkvrv/AI Final Project/rushhour-cpp/build]==] SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  tests_TESTS CarTest.Constructor)
