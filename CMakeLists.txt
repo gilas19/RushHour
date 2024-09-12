@@ -13,7 +13,6 @@ set(SOURCES
     src/SearchAlgorithms.cpp
     src/Heuristics.cpp
 )
-
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # Create executable
@@ -22,12 +21,26 @@ add_executable(rushhour src/main.cpp ${SOURCES})
 # Include directories
 target_include_directories(rushhour PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+
+# Add Python script execution
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/experiments.txt
+    COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/generateExperiments.py
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generateExperiments.py
+    COMMENT "Generating experiments.txt"
+)
+
+# Add custom target to run experiments
+add_custom_target(run_experiments
+    COMMAND ./rushhour experiments.txt
+    DEPENDS rushhour ${CMAKE_CURRENT_BINARY_DIR}/experiments.txt
+    COMMENT "Running experiments"
+)
+
 # Google Test
 include(FetchContent)
 FetchContent_Declare(
-  googletest
-#   URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
-    URL https://github.com/google/googletest/archive/refs/tags/v1.15.2.zip
+  googletest URL https://github.com/google/googletest/archive/refs/tags/v1.15.2.zip
 )
 FetchContent_MakeAvailable(googletest)
 
