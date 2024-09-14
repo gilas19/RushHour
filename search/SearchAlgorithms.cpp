@@ -170,7 +170,7 @@ MCTSNode *expand(MCTSNode *node) {
             return newNode;
         }
     }
-    return nullptr; // Should never reach here if used correctly
+    return nullptr;
 }
 
 MCTSNode *getBestChild(MCTSNode *node, double explorationParameter) {
@@ -211,7 +211,7 @@ double simulate(MCTSNode *node) {
         return 1.0;
     if (tempBoard.isWon(Player::VERTICAL))
         return 0.0;
-    return 0.5; // Draw
+    return 0.5; // draw
 }
 
 void backpropagate(MCTSNode *node, double score) {
@@ -219,7 +219,7 @@ void backpropagate(MCTSNode *node, double score) {
         node->visits++;
         node->score += score;
         node = node->parent;
-        score = 1.0 - score; // Flip the score for the opponent
+        score = 1.0 - score; // flip the score for the opponent
     }
 }
 

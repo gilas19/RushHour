@@ -130,7 +130,7 @@ int Heuristics::movableCarsCount(const Board &board, Player player) {
 }
 
 int Heuristics::singlePlayer(const Board &board, const Player player) {
-    return 5 * distanceToExit(board, player) + blockersCount(board, player);
+    return distanceToExit(board, player) + blockersCount(board, player);
 }
 
 int Heuristics::twoPlayers(const Board &board, Player currentPlayer) {
@@ -142,15 +142,13 @@ int Heuristics::twoPlayers(const Board &board, Player currentPlayer) {
     int opponentBlockers = blockersCount(board, opponent);
     int playerControl = movableCarsCount(board, currentPlayer);
     int opponentControl = movableCarsCount(board, opponent);
-
-    // Combine factors with appropriate weights
-    int score = 100 * (opponentDistanceToExit - playerDistanceToExit) + 50 * (playerBlockers - opponentBlockers);
+    int score = 2 * (opponentDistanceToExit - playerDistanceToExit) + (playerBlockers - opponentBlockers);
 
     // Add a bonus for being closer to winning
     if (playerDistanceToExit == 0)
-        score += 1000;
+        score += 20;
     if (opponentDistanceToExit == 0)
-        score -= 1000;
+        score -= 20;
 
     return score;
 }

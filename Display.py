@@ -290,7 +290,7 @@ class GUIView:
         possible_moves=None,
         two_players=False,
         save_path=None,
-        fps=2,
+        fps=3,
     ):
         def init_func():
             self.plot_board(
