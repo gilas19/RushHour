@@ -16,7 +16,7 @@ Clone the repository
 ```
 git clone https://github.com/gilas19/RushHour.git
 ```
-* **_Note:_** if using docker, run the following commands to build the project and run the container:
+* **_Note:_** You shoulf run it on cs.huji, but if you use docker, run the following commands to build the project and run the container:
     ```
     docker build -t rushhour .
     docker run -it rushhour
