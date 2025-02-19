@@ -9,6 +9,9 @@ Key features:
 
 This project demonstrates the application of AI techniques to solve and analyze the Rush Hour puzzle game, providing a platform for comparing different algorithms and heuristics.
 
+<p align="center">
+    <img src="https://github.com/gilas19/RushHour/blob/main/results/figures/11_astar_singlePlayer_solution.gif?raw=true" width="443" height="320">
+</p>
 
 ## How to Build
 
